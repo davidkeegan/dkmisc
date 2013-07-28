@@ -183,7 +183,7 @@ only. Affects the appearance of the emacs cursor."
      (setq NewElt 0))
     (setq Idx (1+ Idx))
     (setq New (append New (list NewElt)))))
-  (setq Rv (time-to-seconds (apply 'encode-time New)))
+  (setq Rv (float-time (apply 'encode-time New)))
 
   ; Check for out-of-range input components by converting back to text
   ; and comparing with the original. NOTE: The library functions
@@ -330,7 +330,7 @@ only. Affects the appearance of the emacs cursor."
     (aset Dt 5 (+ Year Yo))
     (if (and (equal Month 2) (equal Day 29))
      (aset Dt 3 28))))
-  (time-to-seconds (apply 'encode-time (append Dt nil)))))
+  (float-time (apply 'encode-time (append Dt nil)))))
 
 (defun dkmisc-TimeOffsetMonth(Seconds &optional Offset)
 "Offsets float Seconds by Count months.
@@ -346,7 +346,7 @@ only. Affects the appearance of the emacs cursor."
    (progn
     (aset Dt 4 (+ Month Mo))
     (if (> Day 28) (aset Dt 3 28))))
-  (time-to-seconds (apply 'encode-time (append Dt nil)))))
+  (float-time (apply 'encode-time (append Dt nil)))))
 
 (defconst dkmisc-UnexpandedDateRe
  (concat
@@ -487,7 +487,7 @@ time back to 'working hours' the previous day."
   (aset Tv 0 0)
   (aset Tv 1 0)
   (aset Tv 2 0)
-  (time-to-seconds (apply 'encode-time (append Tv nil)))))
+  (float-time (apply 'encode-time (append Tv nil)))))
 
 (defun dkmisc-TimeDueInternal(Time SecondsBefore)
 "Returns t if Time is 'due', ie CurrentTime + SecondsBefore >= Time.
