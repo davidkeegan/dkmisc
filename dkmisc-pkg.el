@@ -1,2 +1,2 @@
-(define-package "dkMisc" "0.1"
+(define-package "dkmisc" "0"
  "Miscellaneous functions required by dk* packages.")
