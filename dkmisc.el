@@ -30,7 +30,6 @@ For more information see:
    (if (boundp Symbol)
     (documentation-property Symbol 'variable-documentation))))
 
-
 (defun dkmisc-DocstringShowMatching(Pattern)
 "Extracts the documentation text for symbols matching PATTERN.
 Uses strict case matching."
@@ -51,8 +50,8 @@ Uses strict case matching."
   (with-output-to-temp-buffer "*Package Documentation*"
    (dolist (Symbol SymList)
     (let*
-     ((Sn (symbol-name Symbol)))
-     (setq Flag (make-string (- 60 (length Sn)) ?.))
+     ((Sn (symbol-name Symbol))
+      (Flag (make-string (- 60 (length Sn)) ?.)))
      (princ
       (format "\n\n\n%s %s%s\n%s"
        (if (fboundp Symbol) "Function" "Variable")
