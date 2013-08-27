@@ -558,4 +558,13 @@ something."
  "Returns first element of List matching Regex, or nil."
  (car (dkmisc-Matches Regex List)))
 
+(defun dkmisc-Beep(&optional Count)
+"Beeps Count times."
+ (let*
+  ((Cnt (or Count 1)))
+  (while (> Cnt 0)
+   (beep)
+   (sit-for 0.1)
+   (setq Cnt (- Cnt 1)))))
+
 (provide 'dkmisc)    
