@@ -1,5 +1,5 @@
 ; Miscellaneous utility functions in Emacs Lisp.    
-; (c) David Keegan 20031209
+; (c) David Keegan 2003-2013.
 
 (defun dkmisc()
 "Package of miscellaneous utility functions in Emacs Lisp.
@@ -165,8 +165,6 @@ only. Affects the appearance of the emacs cursor."
   ((TimeList (if Seconds (seconds-to-time Seconds) nil))
    (Fs (or Format "%Y-%m-%d %H:%M:%S")))
   (format-time-string Fs TimeList Universal)))
-
-(require 'parse-time)
 
 (defun dkmisc-TimeParse(Time)
 "Parses string Time to seconds (floating point)."
