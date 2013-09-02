@@ -1,6 +1,10 @@
 ; Miscellaneous utility functions in Emacs Lisp.    
 ; (c) David Keegan 2003-2013.
 
+; Eliminate compile warnings.
+(defvar org-cycle-separator-lines)
+(declare-function org-read-date "org")
+
 (defun dkmisc()
 "Package of miscellaneous utility functions in Emacs Lisp.
 
