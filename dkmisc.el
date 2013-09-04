@@ -154,14 +154,17 @@ only. Affects the appearance of the emacs cursor."
    (setq ad-return-value
     (seconds-to-time (+ Current dkmisc-CurrentTimeShift))))))
 
+;;;###autoload
 (defun dkmisc-DateToText(&optional Seconds Universal)
 "Converts the date part of float Seconds to a string."
  (dkmisc-DateTimeToText Seconds "%Y-%m-%d" Universal))
 
+;;;###autoload
 (defun dkmisc-TimeToText(&optional Seconds Universal)
 "Converts the time part of float Seconds to a string."
  (dkmisc-DateTimeToText Seconds "%H:%M:%S" Universal))
 
+;;;###autoload
 (defun dkmisc-DateTimeToText(&optional Seconds Format Universal)
 "Converts float seconds (default current) date/time to string.
  Default format is ISO date and time."
@@ -170,6 +173,7 @@ only. Affects the appearance of the emacs cursor."
    (Fs (or Format "%Y-%m-%d %H:%M:%S")))
   (format-time-string Fs TimeList Universal)))
 
+;;;###autoload
 (defun dkmisc-TimeParse(Time)
 "Parses string Time to seconds (floating point)."
  (let*
@@ -214,6 +218,7 @@ only. Affects the appearance of the emacs cursor."
   (if Len (setq Rv (substring Rv 0 Len)))
   Rv))
 
+;;;###autoload
 (defun dkmisc-TimeCurrent()
 "Current time of day as float seconds."
  (float-time (current-time)))
@@ -277,6 +282,7 @@ only. Affects the appearance of the emacs cursor."
 (defconst dkmisc-TimeYmdhmLen 16)
 (defconst dkmisc-TimeYmdhmsLen 19)
 
+;;;###autoload
 (defun dkmisc-TimeApplyShift(Base Shift)
 "Applies a shift to a time in text form.
  Shift is also in text format. Gets expected results for calendar
@@ -556,10 +562,12 @@ something."
      (add-to-list 'Rv Elem)))
    (nreverse Rv)))
 
+;;;###autoload
 (defun dkmisc-FirstMatch(Regex List)
  "Returns first element of List matching Regex, or nil."
  (car (dkmisc-Matches Regex List)))
 
+;;;###autoload
 (defun dkmisc-Beep(&optional Count)
 "Beeps Count times."
  (let*
