@@ -1,3 +1,3 @@
 (dkmisc
  :fetcher github
- :url "davidkeegan/dkmisc")
+ :repo "davidkeegan/dkmisc")
