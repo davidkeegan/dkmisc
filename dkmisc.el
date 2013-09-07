@@ -1,9 +1,10 @@
 ;;; dkmisc.el --- Miscellaneous functions required by dk* packages.
 
 ;; Copyright: (c) David Keegan 2010-2013.
-;; Licence: FSF GPLv3 see LICENCE.txt.
+;; Licence: FSF GPLv3 (see LICENCE.txt).
 ;; Author: David Keegan <dksw@eircom.net>
-;; Version: See dkmisc-pkg.el.
+;; Version: 0.4
+;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: utility time date
 ;; URL: https://github.com/davidkeegan/dkmisc
 
