@@ -1,5 +1,5 @@
 (dkmisc
  :fetcher github
  :repo "davidkeegan/dkmisc",
- :files "*.el" "*.info" dir "LICENCE.*" "README.*")
+ :files ("*.el" "*.info" dir "LICENCE.*" "README.*"))
 
