@@ -1,13 +1,10 @@
-; Miscellaneous elisp utility functions.
-; (c) David Keegan 2003-2013.
-
 ;;; dkmisc.el --- Miscellaneous functions required by dk* packages.
-;; Copyright: (c) David Keegan 2010-2013.
-;; Licence: GPLv3 (FSF) see LICENCE.txt.
 
+;; Copyright: (c) David Keegan 2010-2013.
+;; Licence: FSF GPLv3 see LICENCE.txt.
 ;; Author: David Keegan <dksw@eircom.net>
 ;; Version: See dkmisc-pkg.el.
-;; Keywords: utility library
+;; Keywords: utility time date
 ;; URL: https://github.com/davidkeegan/dkmisc
 
 ;;; Commentary:
