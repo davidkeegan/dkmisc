@@ -1,5 +1,21 @@
-; Miscellaneous utility functions in Emacs Lisp.    
+; Miscellaneous elisp utility functions.
 ; (c) David Keegan 2003-2013.
+
+;;; dkmisc.el --- Miscellaneous functions required by dk* packages.
+;; Copyright: (c) David Keegan 2010-2013.
+;; Licence: GPLv3 (FSF) see LICENCE.txt.
+
+;; Author: David Keegan <dksw@eircom.net>
+;; Version: See dkmisc-pkg.el.
+;; Keywords: utility library
+;; URL: https://github.com/davidkeegan/dkmisc
+
+;;; Commentary:
+;;
+;; Miscellaneous elisp functions and definitions, including
+;; time/date and string manipulation.
+;;
+;;; Code:
 
 ; Eliminate compile warnings.
 (defvar org-cycle-separator-lines)
