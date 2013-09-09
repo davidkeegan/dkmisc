@@ -19,17 +19,8 @@
 (defvar org-cycle-separator-lines)
 (declare-function org-read-date "org")
 
-(defun dkmisc()
-"Package of miscellaneous utility functions in Emacs Lisp.
-
-For more information see:
- `dkmisc-StringTrimWs'
- `dkmisc-DocstringsExtract'."
- (interactive)
- (describe-function 'dkmisc))
-
 (defun dkmisc-StringTrimWs(String)
- "Strips whitespace from the beginning and end of STRING"
+ "Strip whitespace from the beginning and end of STRING."
  (let* (Result)
   (setq Result String)
   (and (string-match "^[ \t\n]*" Result)
@@ -39,7 +30,7 @@ For more information see:
   Result))
 
 (defun dkmisc-DocstringGet(Symbol)
-"Returns the documentation associated with SYMBOL or nil if none."
+ "Return the documentation associated with SYMBOL, or nil if none."
  (interactive)
  ; Function?
  (if (fboundp Symbol)
@@ -49,7 +40,7 @@ For more information see:
     (documentation-property Symbol 'variable-documentation))))
 
 (defun dkmisc-DocstringShowMatching(Pattern)
-"Extracts the documentation text for symbols matching PATTERN.
+ "Extract the documentation text for symbols matching PATTERN.
 Uses strict case matching."
  (interactive "sPattern: ")
  (let*
@@ -81,14 +72,14 @@ Uses strict case matching."
 
 (defconst dkmisc-TwoDigits
  "[0-9]\\{2\\}"
-"Matches any two digits.")
+ "Matches any two digits.")
 
 (defconst dkmisc-YearRe
  (concat
   dkmisc-TwoDigits
   "?"
   dkmisc-TwoDigits)
-"Matches a two or four digit year.")
+ "Matches a two or four digit year.")
 
 (defconst dkmisc-YearMonthRe
  (concat
@@ -99,7 +90,7 @@ Uses strict case matching."
   "\\("
   dkmisc-TwoDigits
   "\\)")
-"Matches a Year and Month with optional punctuation.")
+ "Matches a Year and Month with optional punctuation.")
 
 (defconst dkmisc-DateRe
  (concat
@@ -108,7 +99,7 @@ Uses strict case matching."
   "\\("
   dkmisc-TwoDigits
   "\\)")
-"Matches an ISO date/time with optional punctuation.")
+ "Matches an ISO date/time with optional punctuation.")
 
 (defconst dkmisc-TimeRe
  (concat
@@ -119,7 +110,7 @@ Uses strict case matching."
   ":?"
   dkmisc-TwoDigits
   "\\)?")
-"Matches an ISO time with optional seconds and optional punctuation.")
+ "Matches an ISO time with optional seconds and optional punctuation.")
 
 (defconst dkmisc-DateTimeRe
  (concat
@@ -132,22 +123,22 @@ Uses strict case matching."
   dkmisc-TimeRe
   "\\)"
   "\\)?")
-"Matches an ISO date/time with optional time and optional punctuation.")
+ "Matches an ISO date/time with optional time and optional punctuation.")
 
 (defun dkmisc-TimeZoneOffset(Seconds)
-"Returns the timezone offset in seconds of UTC float time Seconds."
+ "Return the timezone offset in seconds of UTC float time SECONDS."
  (car (current-time-zone (seconds-to-time Seconds))))
 
 (defun dkmisc-TimeZoneLabel(Seconds)
-"Returns the timezone label of UTC float time Seconds."
+ "Return the timezone label of UTC float time SECONDS."
  (nth 1 (current-time-zone (seconds-to-time Seconds))))
 
 (defconst dkmisc-CurrentTimeShift nil
-"Time shift for test purposes in float seconds.
-Set via dkmisc-SetCurrentTimeShift.")
+ "Time shift for test purposes in float seconds.
+Set via `dkmisc-SetCurrentTimeShift'.")
 
 (defun dkmisc-SetCurrentTimeShift (&optional DateTimeString)
-"Causes current-time to shift the value returned.
+ "Causes current-time to shift the value returned.
 The value returned increments from the specified time. Call with
 nil argument to eliminate the shift and return to normal.
 WARNING: May have unexpected side-effects. Use for test purposes
@@ -162,7 +153,7 @@ only. Affects the appearance of the emacs cursor."
  dkmisc-CurrentTimeShift)
 
 (defadvice current-time (after dkCt activate compile)
-"Shifts returned value for test purposes."
+ "Shift the returned value for test purposes."
  (if dkmisc-CurrentTimeShift
   (let* ((Current (float-time ad-return-value)))
    (setq ad-return-value
@@ -170,18 +161,18 @@ only. Affects the appearance of the emacs cursor."
 
 ;;;###autoload
 (defun dkmisc-DateToText(&optional Seconds Universal)
-"Converts the date part of float Seconds to a string."
+ "Convert the date part of float SECONDS to a string."
  (dkmisc-DateTimeToText Seconds "%Y-%m-%d" Universal))
 
 ;;;###autoload
 (defun dkmisc-TimeToText(&optional Seconds Universal)
-"Converts the time part of float Seconds to a string."
+ "Convert the time part of float SECONDS to a string."
  (dkmisc-DateTimeToText Seconds "%H:%M:%S" Universal))
 
 ;;;###autoload
 (defun dkmisc-DateTimeToText(&optional Seconds Format Universal)
-"Converts float seconds (default current) date/time to string.
- Default format is ISO date and time."
+ "Convert float SECONDS (default current) date/time to a string.
+Default format is ISO date and time."
  (let*
   ((TimeList (if Seconds (seconds-to-time Seconds) nil))
    (Fs (or Format "%Y-%m-%d %H:%M:%S")))
@@ -189,7 +180,7 @@ only. Affects the appearance of the emacs cursor."
 
 ;;;###autoload
 (defun dkmisc-TimeParse(Time)
-"Parses string Time to seconds (floating point)."
+ "Parse string TIME to seconds (floating point)."
  (let*
   ((Old (parse-time-string Time))
    (New nil)
@@ -219,14 +210,14 @@ only. Affects the appearance of the emacs cursor."
    (error "Bad/out of range component in time string: \"%s\"!" Time)))))
 
 (defun dkmisc-TimeDiff(DateStr1 DateStr2)
-"Returns the difference in seconds between two date/time strings."
+ "Return difference (secs) between date/time strings DATESTR1 and DATESTR2."
  (let*
   ((T1 (dkmisc-TimeParse DateStr1))
    (T2 (dkmisc-TimeParse DateStr2)))
   (- T1 T2)))
 
 (defun dkmisc-TimeCurrentText(&optional Len)
-"Returns the current time in text form, maybe truncated."
+ "Return the current time in text form, maybe truncated."
  (let*
   ((Rv (dkmisc-DateTimeToText (dkmisc-TimeCurrent))))
   (if Len (setq Rv (substring Rv 0 Len)))
@@ -234,29 +225,29 @@ only. Affects the appearance of the emacs cursor."
 
 ;;;###autoload
 (defun dkmisc-TimeCurrent()
-"Current time of day as float seconds."
+ "Return the current time of day as float seconds."
  (float-time (current-time)))
 
 (defconst dkmisc-TimeRepeaterRe
  "\\b\\([[:digit:]]+\\)\\([hdwmy]\\)\\b"
-"A repetition indicator for a date or time.
- A word consisting of <Digits><Unit> where Unit is y|m|d|w|h.")
+ "A repetition indicator for a date or time.
+A word consisting of <Digits><Unit> where Unit is y|m|d|w|h.")
 
 (defconst dkmisc-DateTimeRepeaterRe
  (concat dkmisc-DateTimeRe "[[:blank:]]+\\(" dkmisc-TimeRepeaterRe "\\)?")
-"A regex for a date/time with optional repeater.")
+ "A regex for a date/time with optional repeater.")
 
 (defconst dkmisc-TimeShiftRe
  (concat "\\b\\([-+]\\{0,2\\}\\)" dkmisc-TimeRepeaterRe)
-"A shifter for a date or time.
- Like dkmisc-TimeRepeaterRe but with optional sign prefix. Doubled
- sign means shift relative to default time, single relative to
- current time as per org-mode date input.")
+ "A shifter for a date or time.
+Like dkmisc-TimeRepeaterRe but with optional sign prefix. Doubled
+sign means shift relative to default time, single relative to
+current time as per org-mode date input.")
 
 (defun dkmisc-TimeParseShift(Shift)
-"Parses a time shift/repetition indicator.
- Returns a list containing the unit, the count, and t/nil
- if the shift is relative to the default/current time."
+ "Parse time shift/repetition indicator SHIFT.
+Returns a list containing the unit, the count, and t/nil
+if the shift is relative to the default/current time."
 (let*
  ((Re (dkmisc-FullMatch dkmisc-TimeShiftRe))
   (Rs (or Shift ""))
@@ -279,9 +270,9 @@ only. Affects the appearance of the emacs cursor."
   (list Unit Count FromDefault))))
 
 (defun dkmisc-TimeUnitToSeconds(Unit)
-"Converts a time unit to float seconds.
- Returns nil if unit is valid, but conversion is indeterminate.
- Error if unit is invalid."
+ "Convert time unit UNIT to float seconds.
+Returns nil if unit is valid, but conversion is indeterminate.
+Error if unit is invalid."
  (let* ((Rv nil))
   (cond
    ((equal "h" Unit) (setq Rv (* 3600.0)))
@@ -298,12 +289,13 @@ only. Affects the appearance of the emacs cursor."
 
 ;;;###autoload
 (defun dkmisc-TimeApplyShift(Base Shift)
-"Applies a shift to a time in text form.
- Shift is also in text format. Gets expected results for calendar
- times by adjusting for daylight savings time if necessary. If
- indicated by the shift, Base is replaced by the current time.
- Returns the shifted time in text format with same length as Base
- unless the shift implies more precision is required."
+ "Apply SHIFT to time BASE.
+BASE and SHIFT are in text form. Gets expected results for
+calendar times by adjusting for daylight savings time if
+necessary. If indicated by the shift, BASE is replaced by the
+current time. Returns the shifted time in text format with same
+length as BASE unless the shift implies more precision is
+required."
  (let*
   ((Rv nil)
    (Sl (dkmisc-TimeParseShift Shift))
@@ -336,9 +328,9 @@ only. Affects the appearance of the emacs cursor."
   Rv))
 
 (defun dkmisc-TimeOffsetYear(Seconds &optional Offset)
-"Offsets float Seconds by Offset (default 1) years.
- Limitation: 29 Feb always maps to 28 Feb in the offset date to
- avoid a month change, even if the target year is a leap year."
+ "Offset float SECONDS by OFFSET (default 1) years.
+Limitation: 29 Feb always maps to 28 Feb in the offset date to
+avoid a month change, even if the target year is a leap year."
  (let*
   ((Tl (seconds-to-time Seconds))
    (Dt (vconcat (decode-time Tl)))
@@ -354,9 +346,9 @@ only. Affects the appearance of the emacs cursor."
   (float-time (apply 'encode-time (append Dt nil)))))
 
 (defun dkmisc-TimeOffsetMonth(Seconds &optional Offset)
-"Offsets float Seconds by Count months.
- Limitation: A day of month >28 always offsets to 28 even if the
- target month has more days, to avoid amonth change."
+ "Offset float SECONDS by OFFSET months.
+Limitation: A day of month >28 always offsets to 28 even if the
+target month has more days, to avoid amonth change."
  (let*
   ((Tl (seconds-to-time Seconds))
    (Dt (vconcat (decode-time Tl)))
@@ -373,10 +365,10 @@ only. Affects the appearance of the emacs cursor."
  (concat
   "\\(" dkmisc-TwoDigits dkmisc-TwoDigits "\\)\\(" dkmisc-TwoDigits "\\)\\("
   dkmisc-TwoDigits "\\)")
-"Matches an unexpanded date.")
+ "Matches an unexpanded date.")
 
 (defun dkmisc-TimeExpandDates()
-"Expands timestamps throughout the buffer by inserting missing separators."
+ "Expand timestamps throughout current buffer by inserting separators."
  (save-excursion
   (goto-char (point-min))
   (while (re-search-forward dkmisc-UnexpandedDateRe nil t)
@@ -388,10 +380,10 @@ only. Affects the appearance of the emacs cursor."
    (replace-match Replacement)))))
    
 (defconst dkmisc-IntRe "[+-]?[[:digit:]]+"
-"Regular expression matching an integer.")
+ "Regular expression matching an integer.")
 
 (defun dkmisc-ParseInt(String)
-"Converts String to an integer after validation."
+ "Convert STRING to an integer after validation."
  (let*
   ((Re (dkmisc-FullMatch dkmisc-IntRe))
    (Is (or String ""))
@@ -400,7 +392,7 @@ only. Affects the appearance of the emacs cursor."
   (string-to-number Is)))
 
 (defun dkmisc-FullMatch(Re)
-"Convert Regexp into a full match for a string."
+ "Convert RE into a full match for a string."
  (concat "^" Re "$"))
 
 (defvar dkmisc-ReadstringAdviceEnabled nil
@@ -409,9 +401,9 @@ only. Affects the appearance of the emacs cursor."
 (defvar dkmisc-BaseTimeString nil "Used by read-string advice.")
 
 (defadvice read-string (after dkmisc-ReadstringAdvice activate compile)
-"Augments org input of relative date/time.
-Adds support for unit \"h\" (hours) and interprets missing sign
-as \"+\". Does nothing if dkmisc-ReadstringAdviceEnabled is nil."
+ "Augment org input of relative date/time.
+Add support for unit \"h\" (hours) and interpret missing sign as
+\"+\". Do nothing if `dkmisc-ReadstringAdviceEnabled' is nil."
  (if dkmisc-ReadstringAdviceEnabled
   (let*
    ((Re (concat "^[[:blank:]]*\\(" dkmisc-TimeShiftRe "\\)"))
@@ -438,7 +430,7 @@ as \"+\". Does nothing if dkmisc-ReadstringAdviceEnabled is nil."
 
 (defadvice org-read-date-get-relative
   (before dkmisc-OrdgrAdvice activate compile)
-"Interprets missing sign as ++."
+ "Interpret missing sign as ++."
  (if dkmisc-OrdgrAdviceEnabled
   (let*
    ((Input (ad-get-arg 0))
@@ -451,10 +443,11 @@ as \"+\". Does nothing if dkmisc-ReadstringAdviceEnabled is nil."
       (ad-set-arg 0 (concat "++" Shift))))))))
 
 (defun dkmisc-TimePromptfor(&optional Base)
- "Reads a date/time from the minibuffer.
-Returns a string (because the length indicates the precision
-entered by the user. Interprets relative time shifts from
-Base (a date/time string), or current time if Base is nil."
+ "Read a date/time from the minibuffer.
+Return a string (because the length indicates the precision
+entered by the user). Interpret relative time shifts from
+BASE (a date/time string), or from the current time if BASE is
+nil."
  (let*
   ((dkmisc-ReadstringAdviceEnabled t)
    (dkmisc-OrdgrAdviceEnabled t)
@@ -472,13 +465,13 @@ Base (a date/time string), or current time if Base is nil."
 
 (defun dkmisc-TimeDue(ScheduledTime SecondsBefore &optional
  IgnoreBefore IgnoreAfter)
-"Returns t if ScheduledTime (seconds) is 'due'.
-A Scheduled Time is 'due' when CurrentScheduledTime +
-SecondsBefore >= ScheduledTime. Used to give a warning when the
-time has arrived to deal with something. The optional arguments,
-numbers in the range [0,24), specify a range of hours to be
-excluded from the calculation. Can be useful to bring the 'due'
-time back to 'working hours' the previous day."
+"Return t if SCHEDULEDTIME (seconds) is 'due'.
+SCHEDULEDTIME is 'due' when current + SECONDSBEFORE >=
+SCHEDULEDTIME. Facilitates taking action when the time has
+arrived to deal with something. The optional arguments, numbers
+in the range [0,24), specify a range of hours to be excluded from
+the calculation. Can be useful to bring the 'due' time back to
+'working hours' the previous day."
  (or
   (dkmisc-TimeDueInternal ScheduledTime SecondsBefore)
   (if (not IgnoreBefore)
@@ -501,7 +494,7 @@ time back to 'working hours' the previous day."
     (>= Due ScheduledTime)))))
 
 (defun dkmisc-TimeToMidnight(Seconds)
-"Returns the nearest Midnight <= the specified time."
+ "Returns the nearest Midnight <= the specified time."
  (let*
   ((Tl (seconds-to-time Seconds))
    (Tv (vconcat (decode-time Tl))))
@@ -511,16 +504,15 @@ time back to 'working hours' the previous day."
   (float-time (apply 'encode-time (append Tv nil)))))
 
 (defun dkmisc-TimeDueInternal(Time SecondsBefore)
-"Returns t if Time is 'due', ie CurrentTime + SecondsBefore >= Time.
-Used to give a warning when the time has arrived to deal with
-something."
+ "Return t if Time is 'due', ie current + SecondsBefore >= Time."
  (>= (+ (dkmisc-TimeCurrent) SecondsBefore) Time))
 
 (defun dkmisc-InvokeFilter(DiscardOutput Prog &rest Args)
- "Invokes a program to filter the current buffer.
-  Contents are delivered to program's stdin and replaced by
-  program's stdout. If failure, program's stderr is dislpayed as a
-  message and the current buffer remains unchanged."
+ "Invoke program PROG with arguments ARGS to filter the current buffer.
+Discard output if DISCARDOUTPUT is not nil. Buffer contents are
+delivered to program's stdin and replaced by program's stdout. If
+failure, program's stderr is dislpayed as a message and the
+current buffer remains unchanged."
  (let*
   ((Efn (make-temp-file (concat (getenv "TMPDIR") "/emacs.")  nil ".err")))
   ; Ensure temporary error output file is deleted.
@@ -559,8 +551,8 @@ something."
    (condition-case nil (delete-file Efn) (error nil)))))
 
 (defun dkmisc-FileToString(Filename)
- "Reads a file and returns the content as a string.
-  Returns nil if the file does not exist."
+ "Read file FILENAME and return the content as a string.
+Returns nil if the file does not exist."
   (condition-case nil
    (with-temp-buffer
     (insert-file-contents Filename)
@@ -568,7 +560,7 @@ something."
    (error nil)))
 
 (defun dkmisc-Matches(Regex List)
-"Returns a list of strings from List matching Regex."
+ "Returns a list of strings from LIST matching REGEX."
  (let*
   ((Rv nil))
    (dolist (Elem List)
@@ -578,12 +570,12 @@ something."
 
 ;;;###autoload
 (defun dkmisc-FirstMatch(Regex List)
- "Returns first element of List matching Regex, or nil."
+ "Return the first element of LIST matching REGEX, or nil."
  (car (dkmisc-Matches Regex List)))
 
 ;;;###autoload
 (defun dkmisc-Beep(&optional Count)
-"Beeps Count times."
+ "Beep Count times."
  (let*
   ((Cnt (or Count 1)))
   (while (> Cnt 0)
