@@ -20,10 +20,16 @@
 (declare-function org-read-date "org")
 
 ;;;###autoload
+(defgroup dk nil
+ "David Keegan's Packages."
+ :tag "dk"
+ :group 'emacs)
+
+;;;###autoload
 (defgroup dkmisc nil
  "Customisation of package dkmisc."
  :tag "dkmisc"
- :group 'text)
+ :group 'dk)
 
 (defcustom dkmisc-ConflictMarkerRe "^<<<<<<"
  "Matches a merge conflict marker.
