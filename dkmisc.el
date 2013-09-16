@@ -19,6 +19,18 @@
 (defvar org-cycle-separator-lines)
 (declare-function org-read-date "org")
 
+(defgroup dkmisc nil
+ "Customisation of package dkmisc."
+ :tag "dkmisc"
+ :group 'text)
+
+(defcustom dkmisc-ConflictMarkerRe "^<<<<<<"
+ "Matches a merge conflict marker.
+Conflict markers  are inserted by a version control system to indicate
+where merge conflicts have arisen in the file."
+ :tag "dkmisc-ConflictMarkerRe"
+ :type '(string))
+
 (defun dkmisc-StringTrimWs(String)
  "Strip whitespace from the beginning and end of STRING."
  (let* (Result)
@@ -65,10 +77,6 @@ Uses strict case matching."
       (format "\n\n\n%s %s%s\n%s"
        (if (fboundp Symbol) "Function" "Variable")
        Sn Flag (or (dkmisc-DocstringGet Symbol) "Not Documented!"))))))))
-
-(defconst dkmisc-ConflictMarkerRe
- "^<<<<<<"
- "Matches a merge conflict marker.")
 
 (defconst dkmisc-TwoDigits
  "[0-9]\\{2\\}"
