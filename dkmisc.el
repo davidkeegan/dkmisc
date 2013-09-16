@@ -19,6 +19,7 @@
 (defvar org-cycle-separator-lines)
 (declare-function org-read-date "org")
 
+;;;###autoload
 (defgroup dkmisc nil
  "Customisation of package dkmisc."
  :tag "dkmisc"
