@@ -243,19 +243,20 @@ Default format is ISO date and time."
  "Return the current time of day as float seconds."
  (float-time (current-time)))
 
-(defconst dkmisc-TimeRepeaterRe
+(defconst dkmisc-TimeIntervalRe
  "\\b\\([[:digit:]]+\\)\\([hdwmy]\\)\\b"
- "A repetition indicator for a date or time.
-A word consisting of <Digits><Unit> where Unit is y|m|d|w|h.")
+ "A time interval.
+Also serves as a repetition indicator. A word consisting of
+<Digits><Unit> where Unit is y|m|d|w|h.")
 
 (defconst dkmisc-DateTimeRepeaterRe
- (concat dkmisc-DateTimeRe "[[:blank:]]+\\(" dkmisc-TimeRepeaterRe "\\)?")
- "A regex for a date/time with optional repeater.")
+ (concat dkmisc-DateTimeRe "[[:blank:]]+\\(" dkmisc-TimeIntervalRe "\\)?")
+ "A regex for a date/time with optional repetition indicator.")
 
 (defconst dkmisc-TimeShiftRe
- (concat "\\b\\([-+]\\{0,2\\}\\)" dkmisc-TimeRepeaterRe)
+ (concat "\\b\\([-+]\\{0,2\\}\\)" dkmisc-TimeIntervalRe)
  "A shifter for a date or time.
-Like dkmisc-TimeRepeaterRe but with optional sign prefix. Doubled
+Like dkmisc-TimeIntervalRe but with optional sign prefix. Doubled
 sign means shift relative to default time, single relative to
 current time as per org-mode date input.")
 
