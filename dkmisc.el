@@ -479,17 +479,17 @@ nil."
   (setq Rv (org-read-date SuggestTime nil nil nil Default))
   Rv))
 
-(defun dkmisc-TimeDue(ScheduledTime SecondsBefore &optional
+(defun dkmisc-TimeActionable(ScheduledTime SecondsBefore &optional
  IgnoreBefore IgnoreAfter)
-"Return t if SCHEDULEDTIME (seconds) is 'due'.
-SCHEDULEDTIME is 'due' when current + SECONDSBEFORE >=
+"Return t if SCHEDULEDTIME (seconds) is actionable.
+SCHEDULEDTIME is actionable when current + SECONDSBEFORE >=
 SCHEDULEDTIME. Facilitates taking action when the time has
 arrived to deal with something. The optional arguments, numbers
 in the range [0,24), specify a range of hours to be excluded from
-the calculation. Can be useful to bring the 'due' time back to
-'working hours' the previous day."
+the calculation. Can be useful to bring the actionable time back
+to 'working hours' the previous day."
  (or
-  (dkmisc-TimeDueInternal ScheduledTime SecondsBefore)
+  (dkmisc-TimeActionableInternal ScheduledTime SecondsBefore)
   (if (not IgnoreBefore)
    nil
    (if (or (< IgnoreBefore 0) (>= IgnoreAfter 24)
@@ -499,15 +499,15 @@ the calculation. Can be useful to bring the 'due' time back to
     ((Midnight (dkmisc-TimeToMidnight ScheduledTime))
      (Start nil)
      (End nil)
-     (Due (+ (dkmisc-TimeCurrent) SecondsBefore)))
+     (Actionable (+ (dkmisc-TimeCurrent) SecondsBefore)))
 
     ; Evaluate "dead zone".
     (setq Start (- Midnight (* IgnoreBefore 3600)))
     (setq End (+ Midnight(* IgnoreAfter 3600)))
 
-    (if (and (>= Due Start) (<= Due End))
-     (setq Due (+ Due (- End Start))))
-    (>= Due ScheduledTime)))))
+    (if (and (>= Actionable Start) (<= Actionable End))
+     (setq Actionable (+ Actionable (- End Start))))
+    (>= Actionable ScheduledTime)))))
 
 (defun dkmisc-TimeToMidnight(Seconds)
  "Returns the nearest Midnight <= the specified time."
@@ -519,8 +519,8 @@ the calculation. Can be useful to bring the 'due' time back to
   (aset Tv 2 0)
   (float-time (apply 'encode-time (append Tv nil)))))
 
-(defun dkmisc-TimeDueInternal(Time SecondsBefore)
- "Return t if Time is 'due', ie current + SecondsBefore >= Time."
+(defun dkmisc-TimeActionableInternal(Time SecondsBefore)
+ "Return t if Time is actionable, ie current + SecondsBefore >= Time."
  (>= (+ (dkmisc-TimeCurrent) SecondsBefore) Time))
 
 (defun dkmisc-InvokeFilter(DiscardOutput Prog &rest Args)
