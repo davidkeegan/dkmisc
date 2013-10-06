@@ -1,7 +1,7 @@
 ;;; dkmisc.el --- Miscellaneous functions required by dk* packages.
 
 ;; Copyright: (c) David Keegan 2010-2013.
-;; Licence: FSF GPLv3 (see LICENCE.txt).
+;; Licence: FSF GPLv3.
 ;; Author: David Keegan <dksw@eircom.net>
 ;; Version: 0.6
 ;; Package-Requires: ((emacs "24.1"))
