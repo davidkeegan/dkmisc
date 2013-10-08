@@ -15,9 +15,8 @@
 ;;
 ;;; Code:
 
-; Eliminate compile warnings.
-(defvar org-cycle-separator-lines)
-(declare-function org-read-date "org")
+; DkTbd: Eliminate this?
+(require 'org)
 
 ;;;###autoload
 (defgroup dk nil
