@@ -5,7 +5,7 @@
 ;; Author: David Keegan <dksw@eircom.net>
 ;; Version: 0.6
 ;; Package-Requires: ((emacs "24.1"))
-;; Keywords: utility time date
+;; Keywords: utility time date file
 ;; URL: https://github.com/davidkeegan/dkmisc
 
 ;;; Commentary:
