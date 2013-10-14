@@ -34,7 +34,7 @@
  "Matches a merge conflict marker.
 Conflict markers  are inserted by a version control system to indicate
 where merge conflicts have arisen in the file."
- :tag "dkmisc-ConflictMarkerRe"
+;; :tag "dkmisc-ConflictMarkerRe"
  :type '(string))
 
 (defun dkmisc-StringTrimWs(String)
