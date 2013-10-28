@@ -26,7 +26,7 @@
 
 ;;;###autoload
 (defgroup dkmisc nil
- "Customisation of package dkmisc."
+ "Package dkmisc (misc elisp functions)."
  :tag "dkmisc"
  :group 'dk)
 
