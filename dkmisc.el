@@ -3,7 +3,7 @@
 ;; Copyright: (c) David Keegan 2010-2013.
 ;; Licence: FSF GPLv3.
 ;; Author: David Keegan <dksw@eircom.net>
-;; Version: 0.6
+;; Version: 1.00
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: utility time date file
 ;; URL: https://github.com/davidkeegan/dkmisc
