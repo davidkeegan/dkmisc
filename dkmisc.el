@@ -198,8 +198,29 @@ Default format is ISO date and time."
   If NoCheck accepts more input formats, but skips check 
   for out-of-range input components."
  (let*
-  ((Parsed (date-to-time Time))
+  ((Parsed nil)
    (Rv nil))
+
+  (condition-case Error
+   ; Try this first (handles more input formats than parse-time-string.
+   (setq Parsed (date-to-time Time))
+   (error
+    ; Try parse-time-string.
+    (let*
+    ((Old (parse-time-string Time))
+     (New nil)
+     (Idx 0))
+
+     ; Zero missing time components.
+     (dolist (OldElt Old)
+      (let*
+       ((NewElt OldElt))
+       (if (and (null OldElt) (< Idx 3))
+        (setq NewElt 0))
+       (setq Idx (1+ Idx))
+       (setq New (append New (list NewElt)))))
+     (setq Parsed (apply 'encode-time New)))))
+
   (setq Rv (float-time Parsed))
 
   (if NoCheck
