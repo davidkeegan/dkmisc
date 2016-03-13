@@ -610,4 +610,26 @@ Returns nil if the file does not exist."
    (sit-for 0.1)
    (setq Cnt (- Cnt 1)))))
 
+(defun dkmisc-IcalGetEvent()
+ "Get an icalendar event from the current buffer.
+  Returns (DTSTART DTEND SUMMARY LOCATION)"
+ (let
+  ((Event nil))
+  (save-current-buffer
+   (set-buffer (icalendar--get-unfolded-buffer (current-buffer)))
+   (goto-char (point-min))
+   (if (re-search-forward "^BEGIN:VCALENDAR\\s-*$" nil t)
+    (let (ical-contents ical-errors)
+     (message "Reading iCalendar...")
+     (beginning-of-line)
+     (setq Event
+      (car (icalendar--all-events (icalendar--read-element nil nil)))))))
+  (if (null Event)
+   (error "No icalendar event found in current buffer!"))
+  (list
+   (icalendar--get-event-property Event 'DTSTART)
+   (icalendar--get-event-property Event 'DTEND)
+   (icalendar--get-event-property Event 'SUMMARY)
+   (icalendar--get-event-property Event 'LOCATION))))
+
 (provide 'dkmisc)    
