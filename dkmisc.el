@@ -193,35 +193,31 @@ Default format is ISO date and time."
   (format-time-string Fs TimeList Universal)))
 
 ;;;###autoload
-(defun dkmisc-TimeParse(Time)
- "Parse string TIME to seconds (floating point)."
+(defun dkmisc-TimeParse(Time &optional NoCheck)
+ "Parse string TIME to seconds (floating point).
+  If NoCheck accepts more input formats, but skips check 
+  for out-of-range input components."
  (let*
-  ((Old (parse-time-string Time))
-   (New nil)
-   (Idx 0)
+  ((Parsed (date-to-time Time))
    (Rv nil))
-  (dolist (OldElt Old)
-   (let*
-    ((NewElt OldElt))
-    (if (and (null OldElt) (< Idx 3))
-     (setq NewElt 0))
-    (setq Idx (1+ Idx))
-    (setq New (append New (list NewElt)))))
-  (setq Rv (float-time (apply 'encode-time New)))
+  (setq Rv (float-time Parsed))
 
-  ; Check for out-of-range input components by converting back to text
-  ; and comparing with the original. NOTE: The library functions
-  ; accept out-of-range components.
-  (let*
-   ((Back (dkmisc-DateTimeToText Rv))
-    (Mi (string-match
-         (concat "^" (regexp-quote Time) "\\(.*\\)") Back))
-    (Rest (match-string 1 Back)))
-  (if (and Mi
-       (or (null Rest) (equal Rest "") (equal Rest ":00")
-        (equal Rest " 00:00:00")))
+  (if NoCheck
    Rv
-   (error "Bad/out of range component in time string: \"%s\"!" Time)))))
+   ; Check for out-of-range input components by converting back to text
+   ; and comparing with the original. NOTE: The library functions
+   ; accept out-of-range components.
+   (let*
+    ((Back (dkmisc-DateTimeToText Rv))
+     (Mi (string-match
+          (concat "^" (regexp-quote Time) "\\(.*\\)") Back))
+     (Rest (match-string 1 Back)))
+    (if
+     (and Mi
+      (or (null Rest) (equal Rest "") (equal Rest ":00")
+       (equal Rest " 00:00:00")))
+      Rv
+      (error "Bad/out of range component in time string: \"%s\"!" Time))))))
 
 (defun dkmisc-TimeDiff(DateStr1 DateStr2)
  "Return difference (secs) between date/time strings DATESTR1 and DATESTR2."
@@ -287,9 +283,10 @@ if the shift is relative to the default/current time."
 (defun dkmisc-TimeUnitToSeconds(Unit)
  "Convert time unit UNIT to float seconds.
 Returns nil if unit is valid, but conversion is indeterminate.
-Error if unit is invalid."
+Error if unit is invalid. NB: m=Month (not Minutes)."
  (let* ((Rv nil))
   (cond
+   ((equal "s" Unit) (setq Rv 1.0))
    ((equal "h" Unit) (setq Rv (* 3600.0)))
    ((equal "d" Unit) (setq Rv (* 3600.0 24)))
    ((equal "w" Unit) (setq Rv (* 3600.0 24 7)))
@@ -297,6 +294,21 @@ Error if unit is invalid."
    ((equal "y" Unit))
    (t (error "Bad time unit: \"%s\"!" Unit)))
   Rv))
+
+(defun dkmisc-SecondsToShiftSingleUnit(Sec)
+ "Converts Sec (float) to a Time Shift string."
+ (let*
+  ((Rval Sec)
+   (Runit "s"))
+  (dolist (Unit '("m" "h" "d" "w"))
+   (let*
+    ((Newval
+      (/ Sec (if (equal Unit "m") 60.0 (dkmisc-TimeUnitToSeconds Unit)))))
+    (if (> Newval 1.0)
+     (progn
+      (setq Rval Newval)
+      (setq Runit Unit)))))
+ (concat (format "%d" (round Rval)) Runit)))
 
 (defconst dkmisc-TimeYmdLen 10)
 (defconst dkmisc-TimeYmdhmLen 16)
