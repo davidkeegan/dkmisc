@@ -139,13 +139,32 @@ Uses strict case matching."
   "\\)?")
  "Matches an ISO date/time with optional time and optional punctuation.")
 
-(defun dkmisc-TimeZoneOffset(Seconds)
- "Return the timezone offset in seconds of UTC float time SECONDS."
- (car (current-time-zone (seconds-to-time Seconds))))
+(defun dkmisc-TimeZoneOffset(&optional Seconds)
+ "Return the local timezone offset in seconds of UTC float SECONDS.
+Depending the date of SECONDS the offset incorporates daylight savings.
+SECONDS defaults to current time."
+ (let*
+  ((Sec (if Seconds Seconds (dkmisc-TimeCurrent))))
+  (car (current-time-zone (seconds-to-time Sec)))))
 
-(defun dkmisc-TimeZoneLabel(Seconds)
- "Return the timezone label of UTC float time SECONDS."
- (nth 1 (current-time-zone (seconds-to-time Seconds))))
+(defun dkmisc-TimeZoneOffsetText(&optional Seconds)
+ "Return the local timezone offset text (ISO format) of UTC float SECONDS.
+Depending the date of SECONDS the offset incorporates daylight savings.
+SECONDS defaults to current time"
+ (let*
+  ((Sec (if Seconds Seconds (dkmisc-TimeCurrent)))
+   (Os (dkmisc-TimeZoneOffset Sec))
+   (Ot (dkmisc-DateTimeToText (abs Os) "%H%M" t))
+   (Sign (if (< Os 0.0) "-" "+")))
+  (concat Sign Ot)))
+
+(defun dkmisc-TimeZoneLabel(&optional Seconds)
+ "Return the local timezone label of UTC float SECONDS.
+Depending the date of SECONDS the offset incorporates daylight savings.
+SECONDS defaults to current time."
+ (let*
+  ((Sec (if Seconds Seconds (dkmisc-TimeCurrent))))
+  (nth 1 (current-time-zone (seconds-to-time Sec)))))
 
 (defconst dkmisc-CurrentTimeShift nil
  "Time shift for test purposes in float seconds.
@@ -196,6 +215,7 @@ Default format is ISO date and time."
 (defun dkmisc-TimeParse(Time &optional NoCheck)
  "Parse string TIME to seconds (floating point).
   If NoCheck accepts more input formats, but skips check 
+  Generally assumes TIME is UTC if it has no timezone info.
   for out-of-range input components."
  (let*
   ((Parsed nil)
@@ -239,6 +259,19 @@ Default format is ISO date and time."
        (equal Rest " 00:00:00")))
       Rv
       (error "Bad/out of range component in time string: \"%s\"!" Time))))))
+
+;;;###autoload
+(defun dkmisc-TimeParseLocal(Time &optional NoCheck)
+ "Like dkmisc-TimeParse but assumes TIME is local if no timezone info."
+ (dkmisc-TimeParse (dkmisc-TimeMaybeAppendLocalOffset Time NoCheck) NoCheck))
+ 
+(defun dkmisc-TimeMaybeAppendLocalOffset(Time &optional NoCheck)
+"Appends an ISO format local time offset to TIME if not already present."
+ (if (string-match "[-+][0-9][0-9][0-9]*$" Time)
+  Time
+  (let*
+   ((Seconds (dkmisc-TimeParse Time NoCheck)))
+   (concat Time (dkmisc-TimeZoneOffsetText Seconds)))))
 
 (defun dkmisc-TimeDiff(DateStr1 DateStr2)
  "Return difference (secs) between date/time strings DATESTR1 and DATESTR2."
