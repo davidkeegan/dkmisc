@@ -686,4 +686,19 @@ Returns nil if the file does not exist."
    (icalendar--get-event-property Event 'SUMMARY)
    (icalendar--get-event-property Event 'LOCATION))))
 
+(defun dkmisc-Message(Format &rest Args)
+ "Calls message with timestamp prefix."
+ (let*
+  ((Fs (concat "%s: " Format)))
+  (apply 'message Fs (dkmisc-DateTimeToText) Args)))
+
+(defmacro dkmisc-ElapsedSec(Description &rest body)
+ "Measure the time it takes to evaluate BODY."
+ `(let*
+   ((Start (current-time))
+    (Rv (progn ,@body)))
+   (dkmisc-Message "%s>ElapsedSec: %.06f"
+    ,Description (float-time (time-since Start)))
+   Rv))
+
 (provide 'dkmisc)    
